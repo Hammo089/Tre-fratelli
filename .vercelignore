@@ -1,0 +1,6 @@
+supabase/
+tests/
+prepare.py
+catalog.json
+README.md
+.git/

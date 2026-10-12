@@ -1,0 +1,587 @@
+[
+  {
+    "id": "pz1",
+    "cat": "Pizza",
+    "name_en": "Margherita",
+    "name_ar": "مارغريتا",
+    "image": "assets/items/pz-margherita.jpg",
+    "desc_en": "San Marzano tomato sauce, Fior di Latte mozzarella, fresh basil, extra virgin olive oil",
+    "desc_ar": "صلصة طماطم سان مارزانو، موزاريلا فيور دي لاتي، ريحان طازج، زيت زيتون بكر",
+    "price": 12.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 12.0
+      }
+    ],
+    "toppings": [
+      "cheese",
+      "basil"
+    ],
+    "sort_order": 0
+  },
+  {
+    "id": "pz2",
+    "cat": "Pizza",
+    "name_en": "Pepperoni",
+    "name_ar": "بيبروني",
+    "image": "assets/items/pz-pepperoni.jpg",
+    "desc_en": "Tomato sauce, Fior di Latte, pepperoni, oregano, EVOO",
+    "desc_ar": "صلصة طماطم، موزاريلا، بيبروني، أوريغانو، زيت زيتون",
+    "price": 15.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 15.0
+      }
+    ],
+    "toppings": [
+      "cheese",
+      "pepperoni"
+    ],
+    "sort_order": 1
+  },
+  {
+    "id": "pz3",
+    "cat": "Pizza",
+    "name_en": "Vegetarian",
+    "name_ar": "خضار",
+    "image": "assets/items/pz-vegetarian.jpg",
+    "desc_en": "Tomato sauce, Fior di Latte, bell peppers, mushrooms, olives, onions",
+    "desc_ar": "صلصة طماطم، موزاريلا، فليفلة، فطر، زيتون، بصل",
+    "price": 14.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 14.0
+      }
+    ],
+    "toppings": [
+      "cheese",
+      "pepper",
+      "mushroom",
+      "olive",
+      "onion"
+    ],
+    "sort_order": 2
+  },
+  {
+    "id": "pz4",
+    "cat": "Pizza",
+    "name_en": "Bresaola",
+    "name_ar": "بريزاولا",
+    "image": "assets/items/pz-bresaola.jpg",
+    "desc_en": "Tomato sauce, Fior di Latte, bresaola, arugula, shaved Parmigiano, EVOO",
+    "desc_ar": "صلصة طماطم، موزاريلا، بريزاولا، جرجير، بارميجانو، زيت زيتون",
+    "price": 18.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 18.0
+      }
+    ],
+    "toppings": [
+      "cheese",
+      "meat",
+      "basil"
+    ],
+    "sort_order": 3
+  },
+  {
+    "id": "pz5",
+    "cat": "Pizza",
+    "name_en": "Truffle",
+    "name_ar": "ترافل",
+    "image": "assets/items/pz-truffle.jpg",
+    "desc_en": "White base, Fior di Latte, mushrooms, truffle oil, Parmigiano",
+    "desc_ar": "صلصة بيضاء، موزاريلا، فطر، زيت ترافل، بارميجانو",
+    "price": 18.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 18.0
+      }
+    ],
+    "toppings": [
+      "cheese",
+      "mushroom"
+    ],
+    "sort_order": 4
+  },
+  {
+    "id": "pz6",
+    "cat": "Pizza",
+    "name_en": "Marinara",
+    "name_ar": "مارينارا",
+    "image": "assets/items/pz-marinara.svg",
+    "desc_en": "San Marzano tomato sauce, garlic, oregano, extra virgin olive oil",
+    "desc_ar": "صلصة طماطم سان مارزانو، ثوم، أوريغانو، زيت زيتون بكر",
+    "price": 10.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 10.0
+      }
+    ],
+    "toppings": [],
+    "sort_order": 5
+  },
+  {
+    "id": "pz7",
+    "cat": "Pizza",
+    "name_en": "Turkey",
+    "name_ar": "تركي",
+    "image": "assets/items/pz-turkey.jpg",
+    "desc_en": "Tomato sauce, Fior di Latte, turkey, mushrooms, oregano, EVOO",
+    "desc_ar": "صلصة طماطم، موزاريلا، ديك رومي، فطر، أوريغانو، زيت زيتون",
+    "price": 17.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 17.0
+      }
+    ],
+    "toppings": [
+      "cheese",
+      "meat",
+      "mushroom"
+    ],
+    "sort_order": 6
+  },
+  {
+    "id": "mk1",
+    "cat": "Manakish",
+    "name_en": "Cheese Manoushe",
+    "name_ar": "منقوشة جبنة",
+    "image": "assets/items/mk-cheese.jpg",
+    "desc_en": "Cheese blend, olive oil",
+    "desc_ar": "خلطة أجبان، زيت زيتون",
+    "price": 3.3,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 3.3
+      },
+      {
+        "id": "meshrouha",
+        "name_ar": "مشروحة",
+        "name_en": "Meshrouha",
+        "price": 4.3
+      }
+    ],
+    "toppings": [
+      "cheese"
+    ],
+    "sort_order": 7
+  },
+  {
+    "id": "mk2",
+    "cat": "Manakish",
+    "name_en": "Zaatar Manoushe",
+    "name_ar": "منقوشة زعتر",
+    "image": "assets/items/mk-zaatar.jpg",
+    "desc_en": "Zaatar mix, olive oil",
+    "desc_ar": "زعتر، زيت زيتون",
+    "price": 1.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 1.0
+      },
+      {
+        "id": "meshrouha",
+        "name_ar": "مشروحة",
+        "name_en": "Meshrouha",
+        "price": 2.0
+      }
+    ],
+    "toppings": [
+      "zaatar"
+    ],
+    "sort_order": 8
+  },
+  {
+    "id": "mk3",
+    "cat": "Manakish",
+    "name_en": "Keshek Manoushe",
+    "name_ar": "منقوشة كشك",
+    "image": "assets/items/mk-keshek.jpg",
+    "desc_en": "Keshek spread, olive oil",
+    "desc_ar": "كشك، زيت زيتون",
+    "price": 3.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 3.0
+      },
+      {
+        "id": "meshrouha",
+        "name_ar": "مشروحة",
+        "name_en": "Meshrouha",
+        "price": 4.0
+      }
+    ],
+    "toppings": [
+      "cheese"
+    ],
+    "sort_order": 9
+  },
+  {
+    "id": "mk4",
+    "cat": "Manakish",
+    "name_en": "Tomato & Onion Manoushe",
+    "name_ar": "منقوشة بندورة وبصل",
+    "image": "assets/items/mk-tomato-onion.svg",
+    "desc_en": "Tomato, onion, spices, olive oil",
+    "desc_ar": "بندورة، بصل، بهارات، زيت زيتون",
+    "price": 2.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 2.0
+      },
+      {
+        "id": "meshrouha",
+        "name_ar": "مشروحة",
+        "name_en": "Meshrouha",
+        "price": 3.0
+      }
+    ],
+    "toppings": [
+      "tomato",
+      "onion"
+    ],
+    "sort_order": 10
+  },
+  {
+    "id": "mk5",
+    "cat": "Manakish",
+    "name_en": "Meat Manoushe",
+    "name_ar": "منقوشة لحمة",
+    "image": "assets/items/mk-meat.jpg",
+    "desc_en": "Seasoned minced meat, onion, spices",
+    "desc_ar": "لحمة مفرومة متبّلة، بصل، بهارات",
+    "price": 3.5,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 3.5
+      },
+      {
+        "id": "meshrouha",
+        "name_ar": "مشروحة",
+        "name_en": "Meshrouha",
+        "price": 4.5
+      }
+    ],
+    "toppings": [
+      "meat"
+    ],
+    "sort_order": 11
+  },
+  {
+    "id": "mk6",
+    "cat": "Manakish",
+    "name_en": "Cocktail Manoushe",
+    "name_ar": "منقوشة كوكتيل",
+    "image": "assets/items/mk-cocktail.svg",
+    "desc_en": "Mixed toppings (house blend)",
+    "desc_ar": "خلطة إضافات (خلطة المحل)",
+    "price": 2.2,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 2.2
+      },
+      {
+        "id": "meshrouha",
+        "name_ar": "مشروحة",
+        "name_en": "Meshrouha",
+        "price": 3.2
+      }
+    ],
+    "toppings": [
+      "zaatar",
+      "cheese"
+    ],
+    "sort_order": 12
+  },
+  {
+    "id": "mk7",
+    "cat": "Manakish",
+    "name_en": "Spinach Manoushe",
+    "name_ar": "منقوشة سبانخ",
+    "image": "assets/items/mk-spinach.svg",
+    "desc_en": "Spinach, onion, lemon, sumac, olive oil",
+    "desc_ar": "سبانخ، بصل، ليمون، سماق، زيت زيتون",
+    "price": 2.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 2.0
+      },
+      {
+        "id": "meshrouha",
+        "name_ar": "مشروحة",
+        "name_en": "Meshrouha",
+        "price": 3.0
+      }
+    ],
+    "toppings": [
+      "basil"
+    ],
+    "sort_order": 13
+  },
+  {
+    "id": "dr1",
+    "cat": "Drinks",
+    "name_en": "Pepsi",
+    "name_ar": "بيبسي",
+    "image": "assets/items/dr-pepsi.svg",
+    "desc_en": "330 ml (approx.)",
+    "desc_ar": "330 مل تقريباً",
+    "price": 1.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 1.0
+      }
+    ],
+    "toppings": [],
+    "sort_order": 14
+  },
+  {
+    "id": "dr2",
+    "cat": "Drinks",
+    "name_en": "Pepsi Diet",
+    "name_ar": "بيبسي دايت",
+    "image": "assets/items/dr-pepsi-diet.svg",
+    "desc_en": "330 ml (approx.)",
+    "desc_ar": "330 مل تقريباً",
+    "price": 1.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 1.0
+      }
+    ],
+    "toppings": [],
+    "sort_order": 15
+  },
+  {
+    "id": "dr3",
+    "cat": "Drinks",
+    "name_en": "7 Up",
+    "name_ar": "سفن أب",
+    "image": "assets/items/dr-7up.svg",
+    "desc_en": "330 ml (approx.)",
+    "desc_ar": "330 مل تقريباً",
+    "price": 1.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 1.0
+      }
+    ],
+    "toppings": [],
+    "sort_order": 16
+  },
+  {
+    "id": "dr4",
+    "cat": "Drinks",
+    "name_en": "7 Up Diet",
+    "name_ar": "سفن أب دايت",
+    "image": "assets/items/dr-7up-diet.svg",
+    "desc_en": "330 ml (approx.)",
+    "desc_ar": "330 مل تقريباً",
+    "price": 1.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 1.0
+      }
+    ],
+    "toppings": [],
+    "sort_order": 17
+  },
+  {
+    "id": "dr5",
+    "cat": "Drinks",
+    "name_en": "Mirinda",
+    "name_ar": "ميرندا",
+    "image": "assets/items/dr-mirinda.svg",
+    "desc_en": "330 ml (approx.)",
+    "desc_ar": "330 مل تقريباً",
+    "price": 1.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 1.0
+      }
+    ],
+    "toppings": [],
+    "sort_order": 18
+  },
+  {
+    "id": "dr6",
+    "cat": "Drinks",
+    "name_en": "Mirinda Diet",
+    "name_ar": "ميرندا دايت",
+    "image": "assets/items/dr-mirinda-diet.svg",
+    "desc_en": "330 ml (approx.)",
+    "desc_ar": "330 مل تقريباً",
+    "price": 1.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 1.0
+      }
+    ],
+    "toppings": [],
+    "sort_order": 19
+  },
+  {
+    "id": "dr7",
+    "cat": "Drinks",
+    "name_en": "Yogurt Drink",
+    "name_ar": "لبن",
+    "image": "assets/items/dr-yogurt.svg",
+    "desc_en": "Yogurt drink (approx.)",
+    "desc_ar": "لبن (تقريباً)",
+    "price": 1.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 1.0
+      }
+    ],
+    "toppings": [],
+    "sort_order": 20
+  },
+  {
+    "id": "ds1",
+    "cat": "Dessert",
+    "name_en": "Cinnamon Rolls",
+    "name_ar": "سينامون رولز",
+    "image": "assets/items/ds-cinnamon-rolls.svg",
+    "desc_en": "Cinnamon roll with glaze",
+    "desc_ar": "سينامون رولز مع غلايز",
+    "price": 5.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 5.0
+      }
+    ],
+    "toppings": [],
+    "sort_order": 21
+  },
+  {
+    "id": "ds2",
+    "cat": "Dessert",
+    "name_en": "Tiramisu (1 Person)",
+    "name_ar": "تيراميسو (شخص)",
+    "image": "assets/items/ds-tiramisu-1p.svg",
+    "desc_en": "Classic tiramisu cup",
+    "desc_ar": "تيراميسو كلاسيك (كوب)",
+    "price": 5.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 5.0
+      }
+    ],
+    "toppings": [],
+    "sort_order": 22
+  },
+  {
+    "id": "ds3",
+    "cat": "Dessert",
+    "name_en": "Tiramisu (2 Persons)",
+    "name_ar": "تيراميسو (شخصين)",
+    "image": "assets/items/ds-tiramisu-2p.svg",
+    "desc_en": "Classic tiramisu (2 servings)",
+    "desc_ar": "تيراميسو كلاسيك (حصتين)",
+    "price": 10.0,
+    "enabled": true,
+    "sizes": [
+      {
+        "id": "regular",
+        "name_ar": "عادي",
+        "name_en": "Regular",
+        "price": 10.0
+      }
+    ],
+    "toppings": [],
+    "sort_order": 23
+  }
+]

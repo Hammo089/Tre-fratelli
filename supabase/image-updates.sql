@@ -1,0 +1,14 @@
+update public.menu_items set image='assets/items/pz-marinara.svg' where id='pz6';
+update public.menu_items set image='assets/items/mk-tomato-onion.svg' where id='mk4';
+update public.menu_items set image='assets/items/mk-cocktail.svg' where id='mk6';
+update public.menu_items set image='assets/items/mk-spinach.svg' where id='mk7';
+update public.menu_items set image='assets/items/dr-pepsi.svg' where id='dr1';
+update public.menu_items set image='assets/items/dr-pepsi-diet.svg' where id='dr2';
+update public.menu_items set image='assets/items/dr-7up.svg' where id='dr3';
+update public.menu_items set image='assets/items/dr-7up-diet.svg' where id='dr4';
+update public.menu_items set image='assets/items/dr-mirinda.svg' where id='dr5';
+update public.menu_items set image='assets/items/dr-mirinda-diet.svg' where id='dr6';
+update public.menu_items set image='assets/items/dr-yogurt.svg' where id='dr7';
+update public.menu_items set image='assets/items/ds-cinnamon-rolls.svg' where id='ds1';
+update public.menu_items set image='assets/items/ds-tiramisu-1p.svg' where id='ds2';
+update public.menu_items set image='assets/items/ds-tiramisu-2p.svg' where id='ds3';

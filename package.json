@@ -1,0 +1,1 @@
+{"name":"tre-fratelli","private":true,"version":"1.0.0","type":"module","scripts":{"test":"node --test tests/*.test.js","check":"node --check app.js && node --check admin.js && node --check pizza.js && node --check shared.js"}}

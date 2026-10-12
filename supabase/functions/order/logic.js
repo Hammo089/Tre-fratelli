@@ -1,0 +1,16 @@
+export function validateOrder(input,items,extras,settings){
+ if(!settings.accepting_orders)throw Error('Ordering is paused / استقبال الطلبات متوقف حاليًا');
+ const clean=(v,max)=>String(v||'').trim().slice(0,max);
+ const phone=clean(input.phone,25).replace(/[\s()-]/g,'');if(!/^\+?\d{8,15}$/.test(phone))throw Error('Please enter a valid phone / أدخل رقم هاتف صحيح');
+ const customer_name=clean(input.customer_name,100);if(!customer_name)throw Error('Name is required');
+ if(!['delivery','pickup'].includes(input.fulfillment)||!['cash','whish'].includes(input.payment)||!['web','whatsapp'].includes(input.channel))throw Error('Invalid order options');
+ if(input.payment==='whish'&&!settings.whish_number)throw Error('Whish is not available');
+ const address=clean(input.address,500);if(input.fulfillment==='delivery'&&!address)throw Error('Address is required / العنوان إلزامي');
+ if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(input.request_id||''))throw Error('Invalid request ID');
+ if(!Array.isArray(input.items)||!input.items.length||input.items.length>40)throw Error('Invalid cart');
+ let subtotal=0;
+ const rows=input.items.map(row=>{const item=items.find(i=>i.id===row.item_id&&i.enabled);if(!item)throw Error('An item is no longer available');const size=item.sizes.find(s=>s.id===row.size_id);if(!size)throw Error('Invalid size');if(!Number.isInteger(row.qty)||row.qty<1||row.qty>20)throw Error('Invalid quantity');if(!Array.isArray(row.extras)||!Array.isArray(row.removed))throw Error('Invalid customization');const ids=[...new Set(row.extras)];const adds=ids.map(id=>{const x=extras.find(e=>e.id===id&&e.enabled&&e.categories.includes(item.cat));if(!x)throw Error('An extra is no longer available');return {id:x.id,name_ar:x.name_ar,name_en:x.name_en,price:Number(x.price)};});const removed=[...new Set(row.removed)];if(removed.some(t=>!item.toppings.includes(t)))throw Error('Invalid removed ingredient');const unit_price=Number(size.price)+adds.reduce((n,a)=>n+a.price,0);if(!Number.isFinite(unit_price)||unit_price<0)throw Error('Invalid price');subtotal+=Math.round(unit_price*100)*row.qty;return{item_id:item.id,name_ar:item.name_ar,name_en:item.name_en,size_id:size.id,size_name_ar:size.name_ar,size_name_en:size.name_en,qty:row.qty,extras:adds,removed,notes:clean(row.notes,300),unit_price:Math.round(unit_price*100)/100};});
+ subtotal/=100;if(subtotal<Number(settings.minimum_order_usd))throw Error('Minimum order: $'+settings.minimum_order_usd);
+ const delivery_fee_lbp=input.fulfillment==='delivery'?Number(settings.delivery_fee_lbp):0;const exchange_rate=Number(settings.exchange_rate);const total_usd=Math.round((subtotal+delivery_fee_lbp/exchange_rate)*100)/100;
+ return{request_id:input.request_id,customer_name,phone,address:input.fulfillment==='delivery'?address:'',map_url:clean(input.map_url,500),fulfillment:input.fulfillment,payment:input.payment,channel:input.channel,status:input.channel==='whatsapp'?'whatsapp_pending':'pending',items:rows,notes:clean(input.notes,500),subtotal_usd:subtotal,delivery_fee_lbp,exchange_rate,total_usd,total_lbp:Math.round(subtotal*exchange_rate+delivery_fee_lbp)};
+}

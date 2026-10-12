@@ -1,0 +1,11 @@
+revoke all on public.staff,public.orders,public.menu_items,public.extras,public.settings from anon,authenticated;
+grant select on public.menu_items,public.extras,public.settings to anon,authenticated;
+grant select on public.staff,public.orders to authenticated;
+grant insert,update,delete on public.menu_items,public.extras to authenticated;
+grant update on public.settings to authenticated;
+grant update(status,payment_confirmed) on public.orders to authenticated;
+insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types) values('menu-images','menu-images',true,5242880,array['image/jpeg','image/png','image/webp']);
+create policy menu_image_read on storage.objects for select to anon,authenticated using(bucket_id='menu-images');
+create policy menu_image_create on storage.objects for insert to authenticated with check(bucket_id='menu-images' and exists(select 1 from public.staff where user_id=(select auth.uid()) and role in ('owner','manager')));
+create policy menu_image_update on storage.objects for update to authenticated using(bucket_id='menu-images' and exists(select 1 from public.staff where user_id=(select auth.uid()) and role in ('owner','manager'))) with check(bucket_id='menu-images' and exists(select 1 from public.staff where user_id=(select auth.uid()) and role in ('owner','manager')));
+create policy menu_image_delete on storage.objects for delete to authenticated using(bucket_id='menu-images' and exists(select 1 from public.staff where user_id=(select auth.uid()) and role in ('owner','manager')));

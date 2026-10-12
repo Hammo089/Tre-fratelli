@@ -1,0 +1,40 @@
+create table public.staff (user_id uuid primary key references auth.users(id) on delete cascade, role text not null check(role in ('owner','manager','cashier')));
+alter table public.staff enable row level security;
+create policy staff_self on public.staff for select to authenticated using(user_id=(select auth.uid()));
+grant select on public.staff to authenticated;
+create table public.menu_items(id text primary key,cat text not null,name_ar text not null,name_en text not null,desc_ar text default '',desc_en text default '',image text default '',price numeric not null check(price>=0),sizes jsonb not null,toppings jsonb not null default '[]',enabled boolean default true,sort_order integer default 0);
+create table public.extras(id text primary key,name_ar text not null,name_en text not null,price numeric not null check(price>=0),visual text not null,categories jsonb not null,enabled boolean default true,sort_order integer default 0);
+create table public.settings(id integer primary key check(id=1),accepting_orders boolean not null default false,exchange_rate numeric not null default 89500 check(exchange_rate>0),delivery_fee_lbp integer not null default 100000 check(delivery_fee_lbp>=0),whatsapp_number text not null default '9613960649',whish_number text default '',address_ar text default '',address_en text default '',hours text default '',minimum_order_usd numeric default 0 check(minimum_order_usd>=0));
+create table public.orders(id uuid primary key default gen_random_uuid(),order_number bigint generated always as identity unique,request_id uuid unique not null,tracking_token uuid unique not null default gen_random_uuid(),customer_name text not null,phone text not null,address text not null default '',map_url text default '',fulfillment text not null check(fulfillment in ('delivery','pickup')),payment text not null check(payment in ('cash','whish')),payment_confirmed boolean not null default false,channel text not null check(channel in ('web','whatsapp')),status text not null check(status in ('pending','whatsapp_pending','accepted','preparing','ready','out_for_delivery','delivered','cancelled')),items jsonb not null,notes text default '',subtotal_usd numeric not null check(subtotal_usd>=0),delivery_fee_lbp integer not null check(delivery_fee_lbp>=0),exchange_rate numeric not null check(exchange_rate>0),total_usd numeric not null check(total_usd>=0),total_lbp bigint not null check(total_lbp>=0),ip_hash text not null,created_at timestamptz not null default now());
+create index orders_status_created on public.orders(status,created_at desc);
+create index orders_phone_created on public.orders(phone,created_at desc);
+create index orders_ip_created on public.orders(ip_hash,created_at desc);
+create index menu_category_sort on public.menu_items(cat,sort_order);
+alter table public.menu_items enable row level security;alter table public.extras enable row level security;alter table public.settings enable row level security;alter table public.orders enable row level security;
+create policy menu_read on public.menu_items for select to anon,authenticated using(true);
+create policy extras_read on public.extras for select to anon,authenticated using(true);
+create policy settings_read on public.settings for select to anon,authenticated using(true);
+create policy menu_manage on public.menu_items for all to authenticated using(exists(select 1 from public.staff where user_id=(select auth.uid()) and role in ('owner','manager'))) with check(exists(select 1 from public.staff where user_id=(select auth.uid()) and role in ('owner','manager')));
+create policy extras_manage on public.extras for all to authenticated using(exists(select 1 from public.staff where user_id=(select auth.uid()) and role in ('owner','manager'))) with check(exists(select 1 from public.staff where user_id=(select auth.uid()) and role in ('owner','manager')));
+create policy settings_manage on public.settings for update to authenticated using(exists(select 1 from public.staff where user_id=(select auth.uid()) and role in ('owner','manager'))) with check(exists(select 1 from public.staff where user_id=(select auth.uid()) and role in ('owner','manager')));
+create policy orders_read on public.orders for select to authenticated using(exists(select 1 from public.staff where user_id=(select auth.uid())));
+create policy orders_update on public.orders for update to authenticated using(exists(select 1 from public.staff where user_id=(select auth.uid()))) with check(exists(select 1 from public.staff where user_id=(select auth.uid())));
+grant select on public.menu_items,public.extras,public.settings to anon,authenticated;
+grant insert,update,delete on public.menu_items,public.extras to authenticated;
+grant update on public.settings to authenticated;
+grant select on public.orders to authenticated;
+grant update(status,payment_confirmed) on public.orders to authenticated;
+grant all on public.menu_items,public.extras,public.settings,public.orders,public.staff to service_role;
+grant usage,select on all sequences in schema public to service_role;
+create function public.record_order(payload jsonb) returns jsonb language plpgsql security invoker set search_path='' as $$
+declare old public.orders; result public.orders;begin
+ perform pg_advisory_xact_lock(hashtextextended(payload->>'ip_hash',0));
+ select * into old from public.orders where request_id=(payload->>'request_id')::uuid;
+ if found then return to_jsonb(old); end if;
+ if (select count(*) from public.orders where ip_hash=payload->>'ip_hash' and created_at>now()-interval '10 minutes')>=8 then raise exception 'Too many orders. Please contact the restaurant.';end if;
+ if (select count(*) from public.orders where phone=payload->>'phone' and created_at>now()-interval '10 minutes')>=5 then raise exception 'Too many orders for this phone number.';end if;
+ insert into public.orders(request_id,customer_name,phone,address,map_url,fulfillment,payment,channel,status,items,notes,subtotal_usd,delivery_fee_lbp,exchange_rate,total_usd,total_lbp,ip_hash)
+ values((payload->>'request_id')::uuid,payload->>'customer_name',payload->>'phone',payload->>'address',payload->>'map_url',payload->>'fulfillment',payload->>'payment',payload->>'channel',payload->>'status',payload->'items',payload->>'notes',(payload->>'subtotal_usd')::numeric,(payload->>'delivery_fee_lbp')::integer,(payload->>'exchange_rate')::numeric,(payload->>'total_usd')::numeric,(payload->>'total_lbp')::bigint,payload->>'ip_hash') returning * into result;
+ return to_jsonb(result);end;$$;
+revoke all on function public.record_order(jsonb) from public,anon,authenticated;grant execute on function public.record_order(jsonb) to service_role;
+alter publication supabase_realtime add table public.orders;
