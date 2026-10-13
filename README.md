@@ -35,3 +35,9 @@ Live integration checked: order insertion, server-calculated total, idempotency,
 Web ordering can be toggled from the dashboard operations bar. Default preparation time is initially 25 minutes and is editable in Settings. On acceptance/preparation, a database trigger sets the estimated ready timestamp. Staff can explicitly reset the time from now and publish a customer-facing message. Tracking returns these fields and displays a countdown; it never marks an order ready automatically, and preparation estimates do not include delivery travel. WhatsApp does not receive automatic status notifications. The dashboard includes status counters, quick workflow actions, name/phone/order-number search, and an embedded Arabic operating guide.
 
 Pizza and manakish categories have separate Italian and Lebanese visual treatments, using the existing photos and restaurant palette.
+
+## Ledger, feedback and restaurant identity
+
+The order ledger queries all historical orders with server-side date/status/name/phone/number filters, 50 rows per page, details and page CSV export. Dates use Beirut boundaries. Customer feedback is private: public callers can submit through the rate-limited Edge Function, and only authorized staff can read/update status and internal notes. No complaint, phone or note is publicly listed.
+
+Pizza sizes are labelled 25 cm and 35 cm. Existing prices are retained on 25 cm; 35 cm is initially disabled pending owner pricing. Bresaola addon is created disabled pending its price. Size enablement is checked server-side and editable in the dashboard. The site prominently states the owner's supplied claims: stone oven and 100% Italian pizza ingredients, from flour to cheese and all ingredients.

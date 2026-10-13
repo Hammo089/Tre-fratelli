@@ -28,6 +28,16 @@ Deno.serve(async(req:Request)=>{if(req.method==='OPTIONS')return new Response('o
  const {error}=await db.from('staff').update({role:input.role}).eq('user_id',input.user_id);return error?reply({error:'Could not update role'},500):reply({ok:true});
  }
 
+
+ if(input.action==='feedback'){
+ const clean=(v:unknown,n:number)=>String(v||'').trim().slice(0,n);const kind=clean(input.kind,20),message=clean(input.message,1500),phone=clean(input.phone,25);
+ if(!['review','complaint','suggestion'].includes(kind)||message.length<5)return reply({error:'Please write your feedback / اكتب رأيك أو المشكلة'},400);
+ const rating=input.rating===null||input.rating===''||input.rating===undefined?null:Number(input.rating);if(rating!==null&&(!Number.isInteger(rating)||rating<1||rating>5))return reply({error:'Invalid rating'},400);
+ if(phone&&!/^\+?[\d\s()-]{8,25}$/.test(phone))return reply({error:'Invalid phone number'},400);
+ const ip=req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()||req.headers.get('cf-connecting-ip')||'unknown';const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(ip));const ip_hash=Array.from(new Uint8Array(bytes)).map(x=>x.toString(16).padStart(2,'0')).join('');
+ const {error}=await db.rpc('record_feedback',{payload:{kind,rating,customer_name:clean(input.customer_name,100),phone,order_reference:clean(input.order_reference,40),message,ip_hash}});
+ if(error)return reply({error:error.message.startsWith('Too many')?error.message:'Could not save feedback'},429);return reply({ok:true});
+ }
  if(input.action==='track'){if(!/^[0-9a-f-]{36}$/i.test(input.token||''))return reply({error:'Invalid tracking link'},400);const {data,error}=await db.from('orders').select('order_number,status,total_usd,fulfillment,payment_confirmed,created_at,estimated_prep_minutes,ready_at,customer_message').eq('tracking_token',input.token).single();if(error)return reply({error:'Order not found'},404);return reply(data);}
  const [a,b,c]=await Promise.all([db.from('menu_items').select('*'),db.from('extras').select('*'),db.from('settings').select('*').eq('id',1).single()]);if(a.error||b.error||c.error)return reply({error:'Menu unavailable'},503);
  let receiptBytes:Uint8Array|null=null;let receiptType='';if(input.receipt&&input.payment==='whish'){const m=/^data:(image\/(jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(input.receipt);if(!m)return reply({error:'Invalid receipt image'},400);receiptType=m[1];receiptBytes=Uint8Array.from(atob(m[3]),c=>c.charCodeAt(0));if(receiptBytes.length>2097152)return reply({error:'Receipt is too large'},400);const b=receiptBytes;const valid=(m[2]==='jpeg'&&b[0]===255&&b[1]===216)||(m[2]==='png'&&b[0]===137&&b[1]===80&&b[2]===78)||(m[2]==='webp'&&String.fromCharCode(...b.slice(0,4))==='RIFF');if(!valid)return reply({error:'Invalid image contents'},400);}
