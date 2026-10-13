@@ -1,0 +1,2 @@
+import {catalog,origin,paths,esc} from '../server/seo.js';
+export async function GET(){try{const {items,s}=await catalog();return new Response('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+paths(items).map(p=>`<url><loc>${esc(origin(s)+p)}</loc></url>`).join('')+'</urlset>',{headers:{'Content-Type':'application/xml','Cache-Control':'public, s-maxage=60, stale-while-revalidate=300'}});}catch{return new Response('Unavailable',{status:503});}}
