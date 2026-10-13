@@ -29,3 +29,9 @@ Deploy `supabase/functions/order/index.ts` as `order` with `verify_jwt=true`. `l
 `npm run check`: JavaScript syntax.
 
 Live integration checked: order insertion, server-calculated total, idempotency, private tracking, rejected forged extras, blocked anonymous order reads, blocked anonymous staff management. Reports currently cover the latest 1,000 orders; they exclude incomplete/cancelled orders from sales. Dashboard updates use Realtime with a 20-second polling fallback. Print uses the browser dialog; direct silent printing requires additional printer integration.
+
+## Restaurant operations update
+
+Web ordering can be toggled from the dashboard operations bar. Default preparation time is initially 25 minutes and is editable in Settings. On acceptance/preparation, a database trigger sets the estimated ready timestamp. Staff can explicitly reset the time from now and publish a customer-facing message. Tracking returns these fields and displays a countdown; it never marks an order ready automatically, and preparation estimates do not include delivery travel. WhatsApp does not receive automatic status notifications. The dashboard includes status counters, quick workflow actions, name/phone/order-number search, and an embedded Arabic operating guide.
+
+Pizza and manakish categories have separate Italian and Lebanese visual treatments, using the existing photos and restaurant palette.
