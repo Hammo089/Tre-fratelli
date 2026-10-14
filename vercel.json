@@ -60,6 +60,10 @@
     {
       "source": "/en/menu/:path*",
       "destination": "/api/page?path=/en/menu/:path*"
+    },
+    {
+      "source": "/ar",
+      "destination": "/api/page?path=/ar"
     }
   ],
   "functions": {
