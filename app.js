@@ -20,17 +20,26 @@ function renderBuilder(){const old=$('#size').value;$('#buildTitle').textContent
 function renderPizza(){
  const stage=$('#pizzaStage'),v=variant(),mini=current.cat==='MiniManakish',american=current.cat==='AmericanPizza',sweet=current.id==='nutella';
  const mesh=isManakish(current.cat)&&/mesh|mach|مشرو/i.test([v?.id,v?.name_en,v?.name_ar].join(' ')),large=isPizza(current.cat)&&(v?.id==='35cm'||/35/.test(v?.name_en||''));
- stage.dataset.size=!(isPizza(current.cat)||isManakish(current.cat))?'large':mini?'mini':mesh||large?'large':'regular';
- stage.style.setProperty('--preview-scale',mini?'.50':mesh||large||sweet?'.98':'.70');
+ stage.dataset.size=!(isPizza(current.cat)||isManakish(current.cat))?'large':mini?'mini':american||mesh||large?'large':'regular';
+ stage.style.setProperty('--preview-scale',mini?'.50':american||mesh||large||sweet?'.98':'.70');
  $('#sizePreview').textContent=mini?tr('ميني','Mini'):isPizza(current.cat)||sweet?name(v):mesh?tr('مشروحة — عجينة أكبر وأرق','Meshrouha — larger, thinner dough'):tr('عادي','Regular');
  const keys=[...(current.toppings||[]).filter(t=>!removed.has(t))],custom=[];
  for(const e of extras.filter(e=>selected.has(e.id)&&extraMatches(e,current))){const count=selected.get(e.id);if(e.visual==='lemon')continue;if(e.image)custom.push({image:safeImage(e.image),count,key:e.id});else for(let n=0;n<count;n++)keys.push(e.visual);}
  if(isPizza(current.cat)||isManakish(current.cat))stage.innerHTML=isManakish(current.cat)?manakishPhoto(keys,mesh):pizzaSVG(keys,false,['pz5','am_chicken_bbq'].includes(current.id),current.id==='pz7'?'turkey':'meat',american);
- else if(sweet)stage.innerHTML=`<div class="photo-pizza dessert-photo" role="img" aria-label="${esc(tr('بيتزا نوتيلا مع إضافاتك','Nutella pizza with your toppings'))}"><img class="dessert-base-photo" src="${esc(safeImage(current.image))}" alt="" draggable="false"></div>`;
+ else if(sweet)stage.innerHTML=`<div class="photo-pizza dessert-photo" role="img" aria-label="${esc(tr('بيتزا نوتيلا مع إضافاتك','Nutella pizza with your toppings'))}"><img class="dessert-base-photo" src="assets/dessert-real/nutella-base.webp" alt="" draggable="false"></div>`;
  else stage.innerHTML=`<img src="${esc(safeImage(current.image))}" alt="${esc(name(current))}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
  const photo=stage.querySelector('.photo-pizza');
- if(photo)for(const layer of custom){if(!layer.image)continue;const seed=[...layer.key].reduce((a,c)=>a+c.charCodeAt(0),0),chip=sweet&&layer.key.endsWith('_chips'),biscuit=sweet&&/_(oreo|lotus)$/.test(layer.key),pieces=chip?16:biscuit?6:8,width=chip?6:biscuit?13:sweet?10:12;
- for(let n=0;n<layer.count*pieces;n++){const angle=n*2.399+seed*.17,r=Math.sqrt((n+.5)/(layer.count*pieces))*(sweet?30:28);photo.insertAdjacentHTML('beforeend',`<img class="custom-real-piece ${sweet?'sweet-piece':''}" src="${esc(layer.image)}" alt="" draggable="false" style="left:${50+Math.cos(angle)*r}%;top:${50+Math.sin(angle)*r}%;width:${width}%;height:${width}%;--custom-turn:${(n*59+seed)%360}deg">`);}}
+ if(photo)for(const layer of custom){
+  if(!layer.image)continue;
+  const seed=[...layer.key].reduce((a,c)=>a+c.charCodeAt(0),0),chip=sweet&&layer.key.endsWith('_chips'),oreo=sweet&&layer.key.endsWith('_oreo'),lotus=sweet&&layer.key.endsWith('_lotus');
+  const pieces=chip?26:oreo?18:lotus?14:sweet?16:8,width=chip?2.9:oreo?5.5:lotus?5.8:sweet?4.7:12;
+  let source=layer.image;
+  if(sweet&&source.includes('/assets/dessert-real/')){if(oreo)source='assets/dessert-real/oreo-crumb.webp';else if(lotus)source='assets/dessert-real/lotus-crumb.webp';else if(layer.key.endsWith('_white_chocolate'))source='assets/dessert-real/white-chocolate-shard.webp';}
+  for(let n=0;n<layer.count*pieces;n++){
+   const angle=n*2.399963+seed*.137,r=Math.sqrt((n+.55)/(layer.count*pieces))*(sweet?32:28),w=width*(sweet?.82+((n*13+seed)%8)*.045:1);
+   photo.insertAdjacentHTML('beforeend',`<img class="custom-real-piece ${sweet?'sweet-piece natural-sweet-piece':''}" src="${esc(source)}" alt="" draggable="false" style="left:${50+Math.cos(angle)*r}%;top:${50+Math.sin(angle)*r}%;width:${w}%;height:${w}%;--custom-turn:${(n*59+seed)%360}deg">`);
+  }
+ }
  $('#quantity').textContent=qty;$('#buildPrice').textContent=usd(price()*qty);
 }
 
