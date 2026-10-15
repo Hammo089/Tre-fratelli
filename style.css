@@ -35,3 +35,6 @@
 .pizza-stage[data-size=mini]{transform:scale(.50)}
 
 .american-card-preview{position:absolute;inset:5%;pointer-events:none}.card-photo .pizza-dough-photo{object-fit:contain}.card-photo .pizza-sauce-photo{width:74%;height:74%;object-fit:contain}.card-photo .piece-image{height:auto;object-fit:initial}
+
+/* American crust and an even melted-cheese layer, independent of Napoli. */
+.american-photo .pizza-sauce-photo,.card-photo .american-photo .pizza-sauce-photo{width:82%;height:82%;left:9%;top:9%}.american-cheese-photo,.card-photo .american-cheese-photo{position:absolute;width:82%;height:82%;left:9%;top:9%;object-fit:contain;pointer-events:none}.dessert-base-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;border-radius:50%}.sweet-piece{filter:drop-shadow(0 1px 1px #25140730)}
