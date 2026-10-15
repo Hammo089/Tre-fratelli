@@ -29,3 +29,5 @@
 
 /* Landing editor: pointer dragging works on touch screens and desktops. */
 .landing-sort{display:grid;gap:10px;margin-bottom:24px}.landing-row{display:flex;align-items:center;gap:10px;background:var(--cream,#faf6ed);border:1px solid #ddd7cb;border-radius:14px;padding:10px}.landing-row>span{flex:1;min-width:0}.landing-row button{min-width:44px;min-height:44px;border:1px solid #d3d6cc;border-radius:10px;background:white;color:#21452e}.drag-handle{touch-action:none;cursor:grab;font-size:26px;user-select:none}.landing-row.is-dragging{outline:2px solid #397447;box-shadow:0 6px 18px #0002}.landing-preview{width:100%;max-width:540px;max-height:300px;object-fit:cover;border-radius:18px;margin:12px 0}.admin-form input[type=file]{max-width:100%}
+
+.sort-item-thumb{width:48px;height:48px;flex:0 0 48px;object-fit:cover;border-radius:10px}.landing-row>span{overflow-wrap:anywhere}@media(max-width:480px){.landing-row{gap:5px;padding:7px}.landing-row>span{font-size:12px}.sort-item-thumb{width:36px;height:36px;flex-basis:36px}}
