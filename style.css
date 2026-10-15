@@ -23,3 +23,5 @@
 }
 @media(max-width:374px){.menu-grid{grid-template-columns:1fr}.menu-card{display:grid;grid-template-columns:105px minmax(0,1fr)}.card-photo{height:100%;min-height:145px;aspect-ratio:auto}.card-body p{font-size:12px}.topping-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.brand img{width:105px}.header-actions button{padding-inline:7px}#builder .pizza-stage{max-width:165px}.creator-credit>div{gap:4px 10px}}
 @media(max-width:700px) and (max-height:650px){#builder .pizza-stage{max-width:130px}#builder .build-stage .eyebrow,#builder .build-stage p{display:none}#builder .build-stage .oven{width:155px;top:40px}#builder .builder-layout{scroll-padding-top:190px}}
+
+.catalog-actions{display:flex;flex-wrap:wrap;gap:8px}.admin-table .catalog-actions button{min-height:44px;white-space:nowrap}.admin-table .danger-action{background:#fbe8e5;color:#a52d25}.badge.item-hidden{background:#f4e6d1;color:#885f21}
