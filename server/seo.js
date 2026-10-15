@@ -1,5 +1,5 @@
 export const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export async function catalog(){const base=process.env.SUPABASE_URL,key=process.env.SUPABASE_ANON_KEY;if(!base||!key)throw Error('Missing menu configuration');const get=async path=>{const r=await fetch(base+'/rest/v1/'+path,{headers:{apikey:key,Authorization:'Bearer '+key},signal:AbortSignal.timeout(8000)});if(!r.ok)throw Error('Menu unavailable');return r.json();};const [items,rows]=await Promise.all([get('menu_items?enabled=eq.true&order=sort_order'),get('settings?id=eq.1')]);return{items,s:rows[0]};}
-export const cats={pizza:'Pizza',manakish:'Manakish',pastries:'Pastries',drinks:'Drinks',dessert:'Dessert'};
+export const cats={pizza:'Pizza','american-pizza':'AmericanPizza','mini-manakish':'MiniManakish',manakish:'Manakish',pastries:'Pastries',drinks:'Drinks',dessert:'Dessert'};
 export function origin(s){try{const u=new URL(s.site_url);if(u.protocol==='https:')return u.origin;}catch{}return 'https://tre-fratelli-wheat.vercel.app';}
 export function paths(items){return ['/', '/en', '/ar',...Object.keys(cats).flatMap(c=>['/menu/'+c,'/en/menu/'+c]),...items.flatMap(i=>['/menu/item/'+encodeURIComponent(i.id),'/en/menu/item/'+encodeURIComponent(i.id)])];}
