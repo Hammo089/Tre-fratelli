@@ -52,3 +52,14 @@
 /* Retain centering and rotation throughout the ingredient animation. */
 @keyframes ingredient-settle{from{opacity:0;transform:translate(-50%,calc(-50% - 16px)) rotate(var(--custom-turn,0deg)) scale(.9)}to{opacity:1;transform:translate(-50%,-50%) rotate(var(--custom-turn,0deg)) scale(1)}}
 .manakish-fill{position:absolute;inset:0;clip-path:circle(39% at 50% 50%);pointer-events:none}.cheese-slice-piece{filter:drop-shadow(0 .4px .4px #6b4a2628)}@media(prefers-reduced-motion:reduce){.custom-real-piece{animation:none;transform:translate(-50%,-50%) rotate(var(--custom-turn,0deg))}}
+
+/* A lightweight photographic ingredient follows an arc from the tapped control. */
+.ingredient-flight{position:fixed;left:0;top:0;z-index:1000;pointer-events:none;display:grid;place-items:center;will-change:transform,opacity;filter:drop-shadow(0 7px 6px #44381b30);contain:layout style}
+.ingredient-flight>i{display:grid;place-items:center;width:100%;height:100%;font-style:normal}
+.ingredient-flight .custom-extra-thumb{width:52px;height:52px;object-fit:contain}
+.ingredient-flight .photo-thumb{transform:scale(1.35);overflow:visible}
+.topping-option{transition:border-color .22s,background-color .22s,box-shadow .22s}
+.topping-option.selected{box-shadow:0 3px 12px #175a3c12}
+.topping-add:active,.extra-stepper button:active,.stepper button:active{transform:scale(.92)}
+.extra-stepper button,.stepper button,.chip,.primary,.secondary{transition:transform .16s,background-color .2s}
+@media(prefers-reduced-motion:reduce){.ingredient-flight{display:none}.topping-option,.extra-stepper button,.stepper button,.chip,.primary,.secondary{transition:none}.topping-add:active,.extra-stepper button:active,.stepper button:active{transform:none}}
