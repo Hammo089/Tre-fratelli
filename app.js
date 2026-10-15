@@ -28,7 +28,7 @@ function renderPizza(){
  if(isPizza(current.cat)||isManakish(current.cat))stage.innerHTML=isManakish(current.cat)?manakishPhoto(keys,mesh):pizzaSVG(keys,false,['pz5','am_chicken_bbq'].includes(current.id),current.id==='pz7'?'turkey':'meat',american);
  else if(sweet)stage.innerHTML=`<div class="photo-pizza dessert-photo" role="img" aria-label="${esc(tr('بيتزا نوتيلا مع إضافاتك','Nutella pizza with your toppings'))}"><img class="dessert-base-photo" src="assets/dessert-real/nutella-base.webp" alt="" draggable="false"></div>`;
  else stage.innerHTML=`<img src="${esc(safeImage(current.image))}" alt="${esc(name(current))}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
- const photo=stage.querySelector('.photo-pizza');
+ const photo=stage.querySelector('.manakish-fill')||stage.querySelector('.photo-pizza');
  if(photo)for(const layer of custom){
   if(!layer.image)continue;
   const seed=[...layer.key].reduce((a,c)=>a+c.charCodeAt(0),0),chip=sweet&&layer.key.endsWith('_chips'),oreo=sweet&&layer.key.endsWith('_oreo'),lotus=sweet&&layer.key.endsWith('_lotus');
