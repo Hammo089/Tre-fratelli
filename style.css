@@ -63,3 +63,7 @@
 .topping-add:active,.extra-stepper button:active,.stepper button:active{transform:scale(.92)}
 .extra-stepper button,.stepper button,.chip,.primary,.secondary{transition:transform .16s,background-color .2s}
 @media(prefers-reduced-motion:reduce){.ingredient-flight{display:none}.topping-option,.extra-stepper button,.stepper button,.chip,.primary,.secondary{transition:none}.topping-add:active,.extra-stepper button:active,.stepper button:active{transform:none}}
+
+.music-dock{position:fixed;left:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:45;line-height:1}.music-toggle{display:flex;align-items:center;gap:7px;min-height:44px;padding:10px 13px;border-radius:30px;border:1px solid #cad8c9;background:#faf7eff5;color:#175a3c;box-shadow:0 3px 15px #153b2420;font-size:12px}.music-toggle>span:first-child{font-size:22px;line-height:1}.music-dock[data-playing=true] .music-toggle{background:#175a3c;color:#faf7ef}.has-cart>.music-dock{bottom:calc(88px + env(safe-area-inset-bottom))}.music-dock[data-builder=true]{bottom:calc(166px + env(safe-area-inset-bottom))}dialog .music-dock{z-index:1001}.card-heading strong,#buildPrice,#mobileCartTotal{font-variant-numeric:tabular-nums}.card-heading strong{overflow-wrap:anywhere}
+
+.music-credit{display:block;width:100%;font-size:10px;line-height:1.7;color:#718076}.music-credit a{min-height:0;display:inline}
