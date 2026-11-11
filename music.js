@@ -1,7 +1,7 @@
 // Optional background music. Respect browser autoplay policy and saved choice.
 const audio=new Audio('assets/music/italian-countryside.mp3');
 audio.loop=true;audio.preload='none';audio.volume=.55;
-let wanted=true,starting=false,suspended=false;
+let wanted=true,starting=false,suspended=false,ready=false;
 try{wanted=localStorage.getItem('tf-music')!=='off';}catch{}
 const dock=document.createElement('div');dock.className='music-dock';
 const button=document.createElement('button');button.type='button';button.className='music-toggle';
@@ -15,7 +15,7 @@ function update(){
 }
 function stopRetry(){document.removeEventListener('click',unlock,true);document.removeEventListener('keydown',unlock,true);}
 async function start(){
- if(!wanted||starting||document.hidden)return;
+ if(!ready||!wanted||starting||document.hidden)return;
  starting=true;
  try{await audio.play();if(!wanted||document.hidden)audio.pause();else stopRetry();}
  catch{if(wanted){document.addEventListener('click',unlock,true);document.addEventListener('keydown',unlock,true);}}
@@ -45,4 +45,10 @@ document.addEventListener('visibilitychange',()=>{
 });
 window.addEventListener('pagehide',()=>audio.pause());
 window.addEventListener('pageshow',()=>{if(wanted)start();});
-place();update();if(wanted)start();
+dock.style.display='none';place();update();
+// Owner settings decide: music.enabled=false removes it; music.url swaps the track. Nothing plays before they load.
+export function configureMusic(m={}){
+ if(m?.enabled===false){wanted=false;audio.pause();stopRetry();dock.remove();modalObserver.disconnect();document.querySelector('.music-credit')?.remove();return;}
+ if(/^https:\/\//i.test(m?.url||'')){audio.src=m.url;document.querySelector('.music-credit')?.remove();}
+ ready=true;dock.style.display='';if(wanted)start();
+}
