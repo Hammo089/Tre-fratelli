@@ -73,3 +73,16 @@
 .card-heading strong,#buildPrice,#mobileCartTotal,.total-row>span:last-child{white-space:normal;unicode-bidi:isolate}
 #mobileCartTotal{min-width:0;text-align:end}
 #musicPreview{max-width:100%}
+
+/* Keep the bag reachable before and after the first item is added. */
+body>main{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+body>.mobile-cart{display:flex;position:fixed;bottom:calc(12px + env(safe-area-inset-bottom));inset-inline-start:auto;inset-inline-end:16px;align-items:center;justify-content:space-between;gap:10px;min-height:58px;max-width:calc(100vw - 32px);padding:12px 16px;border-radius:16px;background:var(--green);color:white;box-shadow:0 8px 30px #163c3040;z-index:30;font-size:14px}
+.mobile-cart>span:first-child{display:flex;align-items:center;gap:8px}
+.mobile-cart b,.builder-cart-link b{padding:2px 8px;border-radius:8px;background:white;color:var(--green)}
+[dir=rtl] .bag-arrow{transform:scaleX(-1)}
+.builder-cart-link{min-height:44px;width:100%;margin-top:3px;background:none;border:0;color:var(--green);font-weight:700}
+@media(max-width:760px){
+ body>.mobile-cart{inset-inline:12px;max-width:none}
+ body>.music-dock{bottom:calc(82px + env(safe-area-inset-bottom))}
+ .music-dock[data-builder=true]{bottom:calc(207px + env(safe-area-inset-bottom))}
+}
