@@ -41,7 +41,7 @@ modalObserver.observe(document.body,{subtree:true,childList:true,attributes:true
 new MutationObserver(update).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
 document.addEventListener('visibilitychange',()=>{
  if(document.hidden){suspended=!audio.paused;audio.pause();}
- else if(suspended&&wanted){suspended=false;start();}
+ else if(wanted){suspended=false;start();}
 });
 window.addEventListener('pagehide',()=>audio.pause());
 window.addEventListener('pageshow',()=>{if(wanted)start();});
