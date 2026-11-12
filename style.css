@@ -86,3 +86,10 @@ body>.mobile-cart{display:flex;position:fixed;bottom:calc(12px + env(safe-area-i
  body>.music-dock{bottom:calc(82px + env(safe-area-inset-bottom))}
  .music-dock[data-builder=true]{bottom:calc(207px + env(safe-area-inset-bottom))}
 }
+
+#customerAccount{width:min(100% - 24px,540px)}
+.customer-content label{display:block;margin-block:10px}
+.customer-content input,.customer-content textarea{display:block;width:100%;margin-top:5px}
+.customer-heading{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-inline-end:36px}
+.customer-row{padding:12px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+.customer-row p{margin:5px 0 10px}

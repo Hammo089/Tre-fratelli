@@ -3,6 +3,12 @@ import {validateOrder} from './logic.js';
 const cors={'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'authorization,apikey,content-type,x-client-info','Access-Control-Allow-Methods':'POST,OPTIONS'};
 const db=createClient(Deno.env.get('SUPABASE_URL')!,Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
 const reply=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{...cors,'Content-Type':'application/json','Cache-Control':'no-store'}});
+const customerUser=async(req:Request)=>{
+ const token=(req.headers.get('Authorization')||'').replace(/^Bearer /i,'');
+ if(!token)return null;
+ const {data:{user},error}=await db.auth.getUser(token);
+ return !error&&user?.phone&&user.phone_confirmed_at?user:null;
+};
 Deno.serve(async(req:Request)=>{if(req.method==='OPTIONS')return new Response('ok',{headers:cors});if(req.method!=='POST')return reply({error:'Method not allowed'},405);try{const raw=await req.text();if(raw.length>2900000)return reply({error:'Request too large'},413);const input=JSON.parse(raw);
 
  if(['claim-owner','staff-list','staff-create','staff-role','staff-remove'].includes(input.action)){
@@ -39,9 +45,16 @@ Deno.serve(async(req:Request)=>{if(req.method==='OPTIONS')return new Response('o
  if(error)return reply({error:error.message.startsWith('Too many')?error.message:'Could not save feedback'},429);return reply({ok:true});
  }
  if(input.action==='track'){if(!/^[0-9a-f-]{36}$/i.test(input.token||''))return reply({error:'Invalid tracking link'},400);const {data,error}=await db.from('orders').select('order_number,status,total_usd,total_lbp,exchange_rate,fulfillment,payment_confirmed,created_at,estimated_prep_minutes,ready_at,customer_message').eq('tracking_token',input.token).single();if(error)return reply({error:'Order not found'},404);return reply(data);}
+ if(input.action==='customer-history'){
+  const user=await customerUser(req);if(!user)return reply({error:'Sign in required'},401);
+  const {data,error}=await db.from('orders').select('order_number,created_at,status,total_lbp,items,tracking_token').eq('customer_user_id',user.id).order('created_at',{ascending:false}).limit(30);
+  return error?reply({error:'Could not load orders'},503):reply({orders:data});
+ }
  const [a,b,c]=await Promise.all([db.from('menu_items').select('*'),db.from('extras').select('*'),db.from('settings').select('*').eq('id',1).single()]);if(a.error||b.error||c.error)return reply({error:'Menu unavailable'},503);
  let receiptBytes:Uint8Array|null=null;let receiptType='';if(input.receipt&&input.payment==='whish'){const m=/^data:(image\/(jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(input.receipt);if(!m)return reply({error:'Invalid receipt image'},400);receiptType=m[1];receiptBytes=Uint8Array.from(atob(m[3]),c=>c.charCodeAt(0));if(receiptBytes.length>2097152)return reply({error:'Receipt is too large'},400);const b=receiptBytes;const valid=(m[2]==='jpeg'&&b[0]===255&&b[1]===216)||(m[2]==='png'&&b[0]===137&&b[1]===80&&b[2]===78)||(m[2]==='webp'&&String.fromCharCode(...b.slice(0,4))==='RIFF');if(!valid)return reply({error:'Invalid image contents'},400);}
- const payload=validateOrder(input,a.data,b.data,c.data);const ip=req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()||req.headers.get('cf-connecting-ip')||'unknown';const hash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(ip));payload.ip_hash=Array.from(new Uint8Array(hash)).map(x=>x.toString(16).padStart(2,'0')).join('');
+ const user=input.customer_account===true?await customerUser(req):null;
+ if(input.customer_account===true&&(!user||c.data.customer_accounts_enabled!==true))return reply({error:'Please sign in again / سجّل دخولك من جديد'},401);
+ const payload={...validateOrder(input,a.data,b.data,c.data),customer_user_id:user?.id??null};const ip=req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()||req.headers.get('cf-connecting-ip')||'unknown';const hash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(ip));payload.ip_hash=Array.from(new Uint8Array(hash)).map(x=>x.toString(16).padStart(2,'0')).join('');
  const {data,error}=await db.rpc('record_order',{payload});if(error)return reply({error:error.message.startsWith('Too many')?error.message:'Could not save order. Please try again.'},429);if(receiptBytes&&!data.receipt_path){const path=data.id+'/receipt.'+receiptType.split('/')[1];const {error:uploadError}=await db.storage.from('payment-receipts').upload(path,receiptBytes,{contentType:receiptType,upsert:true});if(!uploadError)await db.from('orders').update({receipt_path:path}).eq('id',data.id);}
  return reply({order_number:data.order_number,tracking_token:data.tracking_token,items:data.items,total_usd:data.total_usd,exchange_rate:data.exchange_rate,total_lbp:data.total_lbp,delivery_fee_lbp:data.delivery_fee_lbp,status:data.status,estimated_prep_minutes:data.estimated_prep_minutes,ready_at:data.ready_at});
  }catch(e){return reply({error:e instanceof Error?e.message:'Invalid request'},400);}});
