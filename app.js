@@ -39,7 +39,7 @@ function renderPizza(){
  $('#sizePreview').textContent=mini?tr('ميني','Mini'):isPizza(current.cat)||sweet?name(v):mesh?tr('مشروحة — عجينة أكبر وأرق','Meshrouha — larger, thinner dough'):tr('عادي','Regular');
  const keys=[...(current.toppings||[]).filter(t=>!removed.has(t))],custom=[];
  for(const e of extras.filter(e=>selected.has(e.id)&&extraMatches(e,current))){const count=Math.max(0,selected.get(e.id)-(flyingExtras.get(e.id)||0));if(!count||e.visual==='lemon')continue;if(e.image)custom.push({image:safeImage(e.image),count,key:e.id});else for(let n=0;n<count;n++)keys.push(e.visual);}
- if(isPizza(current.cat)||isManakish(current.cat))stage.innerHTML=isManakish(current.cat)?manakishPhoto(keys,mesh):pizzaSVG(keys,false,['pz5','am_chicken_bbq'].includes(current.id),current.id==='pz7'?'turkey':'meat',american);
+ if(isPizza(current.cat)||isManakish(current.cat))stage.innerHTML=isManakish(current.cat)?manakishPhoto(keys,mesh,['mk6','mini_mk6'].includes(current.id)):pizzaSVG(keys,false,['pz5','am_chicken_bbq'].includes(current.id),current.id==='pz7'?'turkey':'meat',american);
  else if(sweet)stage.innerHTML=`<div class="photo-pizza dessert-photo" role="img" aria-label="${esc(tr('بيتزا نوتيلا مع إضافاتك','Nutella pizza with your toppings'))}"><img class="dessert-base-photo" src="assets/dessert-real/nutella-base.webp" alt="" draggable="false"></div>`;
  else stage.innerHTML=`<img src="${esc(safeImage(current.image))}" alt="${esc(name(current))}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
  const photo=stage.querySelector('.manakish-fill')||stage.querySelector('.photo-pizza');
