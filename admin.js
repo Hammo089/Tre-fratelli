@@ -79,40 +79,51 @@ function refreshPending() {
     if (!newest) {
       alertNotification?.close();
       alertNotification = null;
+      void alarmWorker.then(w=>w?.getNotifications({tag:orderAlertTag})).then(list=>list?.forEach(n=>n.close())).catch(()=>{});
       lastNotified = null;
     } else if (window.Notification?.permission === 'granted' && newest.id !== lastNotified) {
       try {
-        alertNotification?.close();
-        alertNotification = new Notification('Tre Fratelli', {body:label,tag:'tre-fratelli-orders',requireInteraction:true});
-        alertNotification.onclick = () => { window.focus(); alarm.querySelector('button').click(); };
+        await desktopAlert(label);
         lastNotified = newest.id;
-      } catch {
-        // Some mobile browsers only support notifications through a service worker.
-      }
+      } catch {}
+
     }
   })().finally(() => { pendingRequest = null; });
   return pendingRequest;
 }
 
-async function activateAlarm() {
-  const permission = window.Notification?.permission === 'default'
-    ? Notification.requestPermission().catch(() => {}) : null;
-  try {
-    const Audio = window.AudioContext || window.webkitAudioContext;
-    if (Audio && (!audio || audio.state !== 'running')) {
-      audio ??= new Audio();
-      await audio.resume();
-    }
-    if (audio?.state === 'running') {
-      beep();
-      $('#sound').textContent = '♫ صوت الطلبات مفعّل';
-      void keepScreenOn();
-    }
-  } catch {
-    messages('تعذّر تشغيل الصوت. جرّب تفعيل التنبيه مرة ثانية.',true);
-  }
-  await permission;
-  void refreshPending();
+const orderAlertTag='tre-fratelli-orders';
+const alarmWorker=navigator.serviceWorker?.register('/orders-sw.js').then(()=>navigator.serviceWorker.ready).catch(()=>null)??Promise.resolve(null);
+function desktopAlert(body, tag=orderAlertTag){
+ return Promise.race([alarmWorker,new Promise(resolve=>setTimeout(()=>resolve(null),1500))]).then(worker=>{
+  const options={body,tag,icon:'/orders-icon.svg',requireInteraction:tag===orderAlertTag};
+  if(worker)return worker.showNotification('Tre Fratelli',options);
+  const n=new Notification('Tre Fratelli',options);
+  n.onclick=()=>{window.focus();if(tag===orderAlertTag)alarm.querySelector('button').click();};
+  if(tag===orderAlertTag)alertNotification=n;
+ });
+}
+navigator.serviceWorker?.addEventListener('message',e=>{if(e.data==='show-orders')alarm.querySelector('button').click();});
+let installEvent;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvent=e;});
+$('#installOrders').onclick=async()=>{
+ if(installEvent){const prompt=installEvent;installEvent=null;await prompt.prompt();return;}
+ $('#alarmSetup').textContent='من قائمة Chrome أو Edge، اختَر تثبيت الموقع كتطبيق. إذا التطبيق مثبّت، افتحه من قائمة البرامج.';
+};
+window.addEventListener('appinstalled',()=>{$('#installOrders').hidden=true;});
+if(matchMedia('(display-mode: standalone)').matches)$('#installOrders').hidden=true;
+async function activateAlarm(){
+ const permission=typeof Notification==='undefined'?Promise.resolve('unsupported'):Notification.permission==='default'?Notification.requestPermission().catch(()=> 'denied'):Promise.resolve(Notification.permission);
+ let sound=false,notification=false;
+ try{
+  const Audio=window.AudioContext||window.webkitAudioContext;
+  if(Audio){audio??=new Audio();await audio.resume();sound=audio.state==='running';if(sound){beep();void keepScreenOn();}}
+ }catch{}
+ if(await permission==='granted'){
+  try{await desktopAlert('هيدا إشعار تجريبي. تنبيهات الطلبات مفعّلة.','tre-fratelli-test');notification=true;}catch{}
+ }
+ $('#alarmSetup').textContent=(sound?'الصوت شغّال. ':'الصوت ما اشتغل، تأكد إن الجهاز والتطبيق مش مكتومين. ')+(notification?'الإشعارات شغّالة.':'الإشعارات ما اشتغلت. اسمح فيها من إعدادات الموقع والكمبيوتر وجرّب مجدداً.');
+ void refreshPending();
 }
 
 setInterval(() => { if (pendingCount) beep(); }, 2000);
